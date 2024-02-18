@@ -1,6 +1,12 @@
 # ReactNativeAuth
 React Native app with OAuth2
 
+Stack:
+- Database: MySql 8
+- Frontend: React Native with Expo
+- Backend: .NET Core 8
+- OAuth: FusionAuth
+
 ## Mobile App
 
 Create a ".env" file in "app" folder:
@@ -23,6 +29,8 @@ Create a "appsettings.Development.json" in "backend" folder:
       "Microsoft.AspNetCore": "Warning"
     }
   },
+  "DB_STRING": "Server=host;Database=database_name;Uid=user;Pwd=password",
+  "AUTH_ISSUER": "...",
   "AUTH_APP_ID": "...",
   "AUTH_SECRET": "..."
 }
