@@ -17,7 +17,7 @@ class DismissError extends Error {
 export default function useAuth() {
 
   const [profile, setProfile] = useState(false); //profile contains user data and when not null means user logged in
-  const [processing, setProcessing] = useState(true); //start waiting
+  const [processing, setProcessing] = useState(true); //start waiting to avoid flickering
 
   const discovery = {
     authorizationEndpoint: AUTH_URL + '/oauth2/authorize',
