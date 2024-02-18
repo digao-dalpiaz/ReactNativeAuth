@@ -1,8 +1,11 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using backend;
+using backend.Handlers;
+
+UnhandledEx.Setup();
 
 var builder = WebApplication.CreateBuilder(args);
+
+Constants.InitConfig(builder.Configuration);
 
 // Add services to the container.
 
@@ -11,23 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        //options.Authority = "<AUTH_URL>";
-        //options.Audience = "<YOUR_APP_ID>";
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = "acme.com",
-            ValidAudience = builder.Configuration.GetValue<string>("AUTH_APP_ID"),
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("AUTH_SECRET"))),
-            ClockSkew = TimeSpan.FromMinutes(30)
-        };
-    });
+Auth.ConfigureAuth(builder);
 
 builder.Services.AddAuthorization();
 
@@ -46,5 +33,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCustomMiddleware(); //RequestHandler
+
+ExceptionHandler.ConfigureExceptionHandler(app);
 
 app.Run();

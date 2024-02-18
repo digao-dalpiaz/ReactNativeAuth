@@ -1,18 +1,16 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
     public class MainController : ControllerBase
     {
 
-        [HttpGet("GetInfo")]
-        public string GetInfo()
+        [HttpGet]
+        public string GetVersion()
         {
-            return "Some info...";
+            return Constants.BACKEND_VERSION;
         }
 
     }
