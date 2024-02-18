@@ -1,4 +1,5 @@
 using backend;
+using backend.DbMigration;
 using backend.Handlers;
 
 UnhandledEx.Setup();
@@ -6,6 +7,8 @@ UnhandledEx.Setup();
 var builder = WebApplication.CreateBuilder(args);
 
 Constants.InitConfig(builder.Configuration);
+
+new MigrationEngine().Run(); //run db migrations
 
 // Add services to the container.
 

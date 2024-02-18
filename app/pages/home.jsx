@@ -17,7 +17,7 @@ export default function Home() {
   )
 
   function sendBackendRequest() {
-    request.get('/Main/GetInfo').then(response => {
+    request.get('/Test/GetInfo').then(response => {
       toastInfo(response.data);
     })
   }

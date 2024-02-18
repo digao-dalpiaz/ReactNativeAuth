@@ -7,7 +7,7 @@ namespace backend.Controllers
     public class MainController : ControllerBase
     {
 
-        [HttpGet]
+        [HttpGet("GetVersion")]
         public string GetVersion()
         {
             return Constants.BACKEND_VERSION;

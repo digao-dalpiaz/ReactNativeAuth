@@ -8,6 +8,12 @@ namespace backend.Handlers
 
         public async Task Invoke(HttpContext context)
         {
+            if (context.GetEndpoint() == null) //endpoint not found (400)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return;
+            }
+
             if (!context.Request.Path.Equals("/Main/GetVersion", StringComparison.OrdinalIgnoreCase))
             {
                 string versao = context.Request.Headers["appVersion"];
