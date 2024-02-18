@@ -45,7 +45,7 @@ export default function useAuth() {
     try {
       response = await authRequest.promptAsync();
     } catch (error) {
-      throw new Error('Error requesting login: ' + error);
+      throw new Error('Error requesting login: ' + error.message);
     }
 
     validateResponse(response);
@@ -61,7 +61,7 @@ export default function useAuth() {
         redirectUri,
       }, discovery)
     } catch (error) {
-      throw new Error('Error getting token: ' + error);
+      throw new Error('Error getting token: ' + error.message);
     }
 
     await receivedTokenData(tokenData);
@@ -77,7 +77,7 @@ export default function useAuth() {
     try {
       response = await openAuthSessionAsync(discovery.endSessionEndpoint + '?' + params.toString(), redirectUri)
     } catch (error) {
-      throw new Error('Error requesting logout: ' + error);
+      throw new Error('Error requesting logout: ' + error.message);
     }
 
     validateResponse(response);
@@ -99,7 +99,7 @@ export default function useAuth() {
     try {
       userData = await fetchUserInfoAsync(tokenData, discovery);
     } catch (error) {
-      throw new Error('Error getting user data: ' + error);
+      throw new Error('Error getting user data: ' + error.message);
     }
 
     const info = {
@@ -163,7 +163,7 @@ export default function useAuth() {
       try {
         newTokenData = await tr.refreshAsync(config, discovery);
       } catch (error) {
-        throw new Error('Error refreshing token: ' + error);
+        throw new Error('Error refreshing token: ' + error.message);
       }
 
       return await receivedTokenData(newTokenData);

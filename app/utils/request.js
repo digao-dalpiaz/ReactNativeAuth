@@ -29,7 +29,7 @@ export function useAxiosInterceptor(auth) {
       }
       return r;
     }, error => {
-      toastError('Request Error', error);
+      toastError('Request Error', error.message);
       return Promise.reject(error);
     })
     request.interceptors.response.use(r => {
