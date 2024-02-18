@@ -45,7 +45,7 @@ Run "npm expo start"
 
 Create a "appsettings.Development.json" in "backend" folder:
 
-```
+```json
 {
   "Logging": {
     "LogLevel": {
