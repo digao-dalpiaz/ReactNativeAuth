@@ -15,6 +15,12 @@ I recommend you to use Docker. Download an image of FusionAuth app and run it.
 
 The default FusionAuth port is 9011.
 
+Steps in FusionAuth admin:
+
+1. Create an application and get app Id.
+2. Create an Master Key for JWT token
+3. Enable JWT in app and configure master key in app JWT.
+
 ### MySql Database
 
 Install MySql Server 8 and create a new empty database.
