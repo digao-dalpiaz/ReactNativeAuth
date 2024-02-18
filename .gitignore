@@ -1,0 +1,9 @@
+.expo/
+node_modules/
+.env
+
+.vs/
+obj/
+bin/
+*.user
+launchSettings.json
