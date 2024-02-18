@@ -6,4 +6,4 @@ node_modules/
 obj/
 bin/
 *.user
-launchSettings.json
+appsettings.Development.json
