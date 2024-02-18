@@ -1,6 +1,8 @@
 # ReactNativeAuth
 React Native app with OAuth2 using FusionAuth
 
+![Preview](resources/demo.mp4)
+
 Stack:
 - Database: MySql 8
 - Frontend: React Native with Expo
