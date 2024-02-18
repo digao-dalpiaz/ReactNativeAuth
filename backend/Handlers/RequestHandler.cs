@@ -8,13 +8,14 @@ namespace backend.Handlers
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.GetEndpoint() == null) //endpoint not found (400)
+            var endpoint = context.GetEndpoint();
+            if (endpoint == null) //endpoint not found (400)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 return;
             }
 
-            if (!context.Request.Path.Equals("/Main/GetVersion", StringComparison.OrdinalIgnoreCase))
+            if (((RouteEndpoint)endpoint).RoutePattern.RawText != "Main/GetVersion")
             {
                 string versao = context.Request.Headers["appVersion"];
                 if (string.IsNullOrEmpty(versao)) throw new Exception("App version not informed");
