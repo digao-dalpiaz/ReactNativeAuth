@@ -32,6 +32,12 @@ namespace backend.Services
                 .Where(x => x.Key != "controller" && x.Key != "action")
                 .Select(x => x.Key + ":" + x.Value.ToString()));
 
+            var endpoint = context.GetEndpoint();
+            if (endpoint == null) { //when called from ExceptionHandler, endpoint is null
+                if (!context.Items.TryGetValue("__OriginalEndpoint", out var objEp)) throw new Exception("Could not get original endpoint");
+                endpoint = (Endpoint)objEp;
+            }
+
             try
             {
                 using (var con = await DatabaseUtils.GetConnection())
@@ -42,7 +48,7 @@ namespace backend.Services
                         [
                             ("@ip", context.Connection.RemoteIpAddress?.ToString()),
                             ("@method", context.Request.Method),
-                            ("@endpoint", ((RouteEndpoint)context.GetEndpoint()).RoutePattern.RawText),
+                            ("@endpoint", ((RouteEndpoint)endpoint).RoutePattern.RawText),
                             ("@params", endpointParams),
                             ("@query", context.Request.QueryString),
                             ("@kind", kind),
