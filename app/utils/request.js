@@ -59,6 +59,12 @@ export function useAxiosInterceptor(auth) {
         case 422:
           msg = error.response.data;
           break;
+        case 500:
+          msg = 'Internal server error';
+          break;
+        case 401:
+          msg = 'Unauthorized';
+          break;
         default:
           msg = 'Error ' + error.response.status;
       }
