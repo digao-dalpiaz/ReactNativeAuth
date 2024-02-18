@@ -8,16 +8,39 @@ export default function Home() {
 
   return (
     <View style={{ padding: 10 }}>
-      <Text />
       <Text>Welcome to Home Page</Text>
+      <Text>Here are some backend tests:</Text>
       <Text />
+      <MyButton title="Get Info" onPress={getInfo} />
       <Text />
-      <MyButton title="Send backend request" onPress={sendBackendRequest} />
+      <MyButton title="Test Error" onPress={testError} />
+      <Text />
+      <MyButton title="Test Validation" onPress={testValidation} />
+      <Text />
+      <MyButton title="Invalid Endpoint" onPress={invalidEndpoint} />
     </View>
   )
 
-  function sendBackendRequest() {
+  function getInfo() {
     request.get('/Test/GetInfo').then(response => {
+      toastInfo(response.data);
+    })
+  }
+
+  function testError() {
+    request.post('/Test/TestError').then(response => {
+      toastInfo(response.data);
+    })
+  }
+
+  function testValidation() {
+    request.post('/Test/TestValidation').then(response => {
+      toastInfo(response.data);
+    })
+  }
+
+  function invalidEndpoint() {
+    request.post('/Test/InvalidEndpoint').then(response => {
       toastInfo(response.data);
     })
   }

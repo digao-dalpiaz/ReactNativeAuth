@@ -13,8 +13,19 @@ namespace backend.Controllers
         [HttpGet("GetInfo")]
         public string GetInfo()
         {
-            throw new Validation("erro de teste");
             return "Some info...";
+        }
+
+        [HttpPost("TestError")]
+        public string TestError()
+        {
+            throw new Exception("Test internal error");
+        }
+
+        [HttpPost("TestValidation")]
+        public string TestValidation()
+        {
+            throw new Validation("Some field invalid");
         }
 
     }
