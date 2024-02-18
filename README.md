@@ -65,6 +65,7 @@ Create a "appsettings.Development.json" in "backend" folder:
     }
   },
   "DB_STRING": "Server=host;Database=database_name;Uid=user;Pwd=password",
+  "AUTH_URL": "http://fusionauth_host:9011",
   "AUTH_ISSUER": "acme.com",
   "AUTH_APP_ID": "{the app id in FusionAuth}",
   "AUTH_SECRET": "{the Master Key secret in FusionAuth}"
