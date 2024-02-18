@@ -17,9 +17,9 @@ The default FusionAuth port is 9011.
 
 Steps in FusionAuth admin:
 
-1. Create an application and get app Id.
-2. Create an Master Key for JWT token
-3. Enable JWT in app and configure master key in app JWT.
+1. Create an Key Master for JWT token (Settings > Key Master > use Generate HMAC secret in the top-right menu)
+2. Create an application, set Client Authentication to "Not required", set Authorized redirect URLs (you can run app once and get this url from error when trying to login).
+3. Enable JWT in app and configure Access token signing key to use the Key Master.
 
 ### MySql Database
 
@@ -30,9 +30,9 @@ Install MySql Server 8 and create a new empty database.
 Create a ".env" file in "app" folder:
 
 ```
-EXPO_PUBLIC_AUTH_CLIENT_ID=...
-EXPO_PUBLIC_AUTH_URL=http://a.b.c.d:9011
-EXPO_PUBLIC_BACKEND_URL=http://a.b.c.d:nnnn
+EXPO_PUBLIC_AUTH_CLIENT_ID={the app id in FusionAuth}
+EXPO_PUBLIC_AUTH_URL=http://fusionauth_host:9011
+EXPO_PUBLIC_BACKEND_URL=http://backend_host:5258
 ```
 
 Run "npm install"
@@ -53,9 +53,13 @@ Create a "appsettings.Development.json" in "backend" folder:
   },
   "DB_STRING": "Server=host;Database=database_name;Uid=user;Pwd=password",
   "AUTH_ISSUER": "...",
-  "AUTH_APP_ID": "...",
-  "AUTH_SECRET": "..."
+  "AUTH_APP_ID": "{the app id in FusionAuth}",
+  "AUTH_SECRET": "{the Master Key secret in FusionAuth}"
 }
 ```
 
-Run application service
+Run application service.
+
+> To run in your phone, install Expo Go app.
+
+**Remember to allow backend and Node in your firewall if running in your phone.**
