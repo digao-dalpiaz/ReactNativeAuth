@@ -21,6 +21,8 @@ Steps in FusionAuth admin:
 2. Create an application, set Client Authentication to "Not required", set Authorized redirect URLs (you can run app once and get this url from error when trying to login).
 3. Enable JWT in app and configure Access token signing key to use the Key Master.
 
+Optional: Configure the Issuer in Tenant. The default is "acme.com", but you may change this. The JWT validation in backend is based on Issuer, App ID and Key Master secret.
+
 ### MySql Database
 
 Install MySql Server 8 and create a new empty database.
@@ -52,7 +54,7 @@ Create a "appsettings.Development.json" in "backend" folder:
     }
   },
   "DB_STRING": "Server=host;Database=database_name;Uid=user;Pwd=password",
-  "AUTH_ISSUER": "...",
+  "AUTH_ISSUER": "acme.com",
   "AUTH_APP_ID": "{the app id in FusionAuth}",
   "AUTH_SECRET": "{the Master Key secret in FusionAuth}"
 }
