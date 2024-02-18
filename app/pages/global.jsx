@@ -11,6 +11,7 @@ import About from "./about";
 import { Image, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Image_loading from "../assets/loading.gif";
+import User from "./user";
 
 const Drawer = createDrawerNavigator();
 
@@ -45,6 +46,9 @@ export default function Global() {
             <Drawer.Screen name="Home" component={Home} options={{ drawerIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} /> }} />
             <Drawer.Screen name="Settings" component={Config} options={{ drawerIcon: ({ color, size }) => <AntDesign name="setting" size={size} color={color} /> }} />
             <Drawer.Screen name="About" component={About} options={{ drawerIcon: ({ color, size }) => <AntDesign name="infocirlceo" size={size} color={color} /> }} />
+            <Drawer.Screen name="User" options={{ drawerIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} /> }}>
+              {() => <User auth={auth} />}
+            </Drawer.Screen>
           </Drawer.Navigator>
         </NavigationContainer>
   )

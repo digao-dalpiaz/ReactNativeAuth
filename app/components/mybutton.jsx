@@ -18,19 +18,19 @@ const textStyle = {
   color: 'white'
 }
 
-export default function MyButton(props) {
+export default function MyButton({disabled, style, icon, title, onPress}) {
   return (
-    <TouchableOpacity disabled={props.disabled}
+    <TouchableOpacity disabled={disabled}
       style={{
         ...btnStyle,
-        backgroundColor: props.disabled ? 'gray' : 'black',
-        ...props.style
+        backgroundColor: disabled ? 'gray' : 'black',
+        ...style
       }}
-      onPress={props.onPress}>
+      onPress={onPress}>
       <View style={{ flexDirection: 'row', alignItems: 'center' /* align items inside row vertically */ }}>
-        {props.icon && <AntDesign name={props.icon} size={24} color="white" />}
-        {(props.icon && props.title) && <View style={{ marginLeft: 10 }} />}
-        <Text style={textStyle}>{props.title}</Text>
+        {icon && <AntDesign name={icon} size={24} color="white" />}
+        {(icon && title) && <View style={{ marginLeft: 10 }} />}
+        <Text style={textStyle}>{title}</Text>
       </View>
     </TouchableOpacity>
   )

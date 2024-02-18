@@ -111,7 +111,8 @@ export default function useAuth() {
       },
       userData: {
         email: userData.email,
-        name: userData.given_name + ' ' + userData.family_name
+        name: userData.name, //given_name + ' ' + userData.family_name
+        roles: userData.roles
       }
     };
 
@@ -235,12 +236,16 @@ export default function useAuth() {
     await surround('logout', execLogout);
   }
 
+  async function forceLogout() {
+    await saveLoginInfo(null);
+  }
+
   useEffect(() => {
     surround('check stored login', checkStoredLogin);
   }, []);
 
   //
 
-  return { processing, profile, login, logout, checkRefresh };
+  return { processing, profile, login, logout, checkRefresh, forceLogout };
 
 }
