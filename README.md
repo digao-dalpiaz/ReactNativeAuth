@@ -13,6 +13,8 @@ Stack:
 
 I recommend you to use Docker. Download an image of FusionAuth app and run it.
 
+*FusionAuth requires its own database, supporting PostgreSQL and MySQL. You need to configure database connection settings when running first time.*
+
 The default FusionAuth port is 9011.
 
 Steps in FusionAuth admin:
