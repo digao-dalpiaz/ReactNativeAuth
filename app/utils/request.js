@@ -38,7 +38,7 @@ export function useAxiosInterceptor(auth) {
     }, error => {
       endRequest();
       handleError(error);
-      return Promise.reject(error);      
+      return Promise.reject(error);
     })
   }
 
@@ -63,7 +63,10 @@ export function useAxiosInterceptor(auth) {
           msg = 'Internal server error';
           break;
         case 401:
-          msg = 'Unauthorized';
+          msg = 'Unauthorized'; //invalid auth
+          break;
+        case 403:
+          msg = 'Forbidden'; //invalid role
           break;
         default:
           msg = 'Error ' + error.response.status;

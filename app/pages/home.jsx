@@ -13,6 +13,8 @@ export default function Home() {
       <Text />
       <MyButton title="Get Info" onPress={getInfo} />
       <Text />
+      <MyButton title="Get Info (only Prof role)" onPress={getInfoOnlyProf} />
+      <Text />
       <MyButton title="Test Error" onPress={testError} />
       <Text />
       <MyButton title="Test Validation" onPress={testValidation} />
@@ -26,6 +28,12 @@ export default function Home() {
       toastInfo(response.data);
     })
   }
+
+  function getInfoOnlyProf() {
+    request.get('/Test/GetInfoOnlyProf').then(response => {
+      toastInfo(response.data);
+    })
+  }  
 
   function testError() {
     request.post('/Test/TestError').then(response => {

@@ -16,6 +16,13 @@ namespace backend.Controllers
             return "Some info...";
         }
 
+        [Authorize(Roles = "prof")]
+        [HttpGet("GetInfoOnlyProf")]
+        public string GetInfoOnlyProf()
+        {
+            return "Only for prof role!";
+        }
+
         [HttpPost("TestError")]
         public string TestError()
         {
