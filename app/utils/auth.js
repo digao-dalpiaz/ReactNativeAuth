@@ -184,11 +184,11 @@ export default function useAuth() {
     if (info !== null) {
       if (!bypassStore) {
         await SecureStore.setItemAsync('token', JSON.stringify(info));
+        log('Saved stored login');
       }
       setProfile(info.userData);
 
       const expirationTime = new Date((info.tokenData.issuedAt + info.tokenData.expiresIn) * 1000);
-      log('Saved stored login');
       log('Expiration time: ' + expirationTime);
     } else {
       await SecureStore.deleteItemAsync('token');
