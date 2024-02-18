@@ -9,6 +9,13 @@ Stack:
 
 ## How to setup the environment
 
+**Requirements:**
+
+- Node
+- Visual Studio
+- VSCode (optional)
+- Docker (optional, but recommended)
+
 ### FusionAuth
 
 I recommend you to use Docker. Download an image of FusionAuth app and run it.
