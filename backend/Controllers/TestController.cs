@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using backend.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -12,6 +13,7 @@ namespace backend.Controllers
         [HttpGet("GetInfo")]
         public string GetInfo()
         {
+            throw new Validation("erro de teste");
             return "Some info...";
         }
 
