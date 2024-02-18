@@ -12,6 +12,7 @@ Stack:
 ### FusionAuth
 
 I recommend you to use Docker. Download an image of FusionAuth app and run it.
+
 The default FusionAuth port is 9011.
 
 ### MySql Database
