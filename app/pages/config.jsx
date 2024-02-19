@@ -7,6 +7,8 @@ export default function Config() {
   return (
     <Page>
       <Text>Settings</Text>
+      <Text />
+      <Text>Nothing here yet.</Text>
     </Page>
   )
 }
