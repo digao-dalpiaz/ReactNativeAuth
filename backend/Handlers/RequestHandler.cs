@@ -9,9 +9,9 @@ namespace backend.Handlers
         public async Task Invoke(HttpContext context)
         {
             var endpoint = context.GetEndpoint();
-            if (endpoint == null) //endpoint not found (400)
+            if (endpoint == null) //endpoint not found (404)
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
             }
 
