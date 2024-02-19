@@ -7,12 +7,20 @@ import { toastError, toastInfo } from "../utils/toast-cfg";
 
 export default function User({ auth }) {
 
+  const [name, setName] = useState(auth.profile.name);
+  const [email, setEmail] = useState(auth.profile.email);
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [reNewPassword, setReNewPassword] = useState('');
 
   return (
     <View style={{ margin: 10 }}>
+
+      <MyInput label="Name" value={name} setValue={setName} />
+      <MyInput label="Email" value={email} setValue={setEmail} />
+
+      <MyButton title="Update" onPress={updateUserData} />
 
       <View style={{ borderWidth: 5, borderColor: '#7cdacc', padding: 16, borderRadius: 5, backgroundColor: '#2cb5a0' }}>
         <Text style={{ fontSize: 20 }}>Change password</Text>
@@ -30,8 +38,15 @@ export default function User({ auth }) {
     </View>
   )
 
+  function updateUserData() {
+    request.post('User/ChangeUserData', { name, email }).then(() => {
+      toastInfo('User data updated!');
+      auth.forceRenewToken();
+    })
+  }
+
   function change() {
-    if (newPassword.length < 8) {
+    if (newPassword.length < 1) {
       toastError('Password must be at least 8 characters');
       return;
     }
@@ -41,9 +56,9 @@ export default function User({ auth }) {
       return;
     }
 
-    request.post('User/ChangePassword', { currentPassword, newPassword }).then(() => {
-      auth.forceLogout();
-      toastInfo('Password changed!\nPlease, login again.');
+    request.post('User/ChangePassword', { currentPassword, newPassword }).then(response => {
+      toastInfo('Password changed!');
+      auth.forceRenewToken(response.data);
     })
   }
 

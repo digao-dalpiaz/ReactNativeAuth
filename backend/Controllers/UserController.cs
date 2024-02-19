@@ -1,13 +1,17 @@
-﻿using backend.DTOs;
+﻿using Azure;
+using backend.DTOs;
 using backend.Exceptions;
+using io.fusionauth;
+using io.fusionauth.domain.api;
+using io.fusionauth.domain.api.user;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Org.BouncyCastle.Ocsp;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
 
 namespace backend.Controllers
 {
@@ -17,68 +21,74 @@ namespace backend.Controllers
     public class UserController : ControllerBase
     {
 
-        private async static Task<(HttpStatusCode, string)> Post(string token, string endpoint, object body)
+        private async static Task<string> GetToken(HttpContext context)
         {
-            using (var client = new HttpClient())
+            return await context.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
+        }
+
+        private static FusionAuthClient GetFusionAuthClient()
+        {
+            return new FusionAuthClient(Constants.GetConfigValue("AUTH_API_KEY"), Constants.GetConfigValue("AUTH_URL"));
+        }
+
+        private static void ValidateResponse<T>(ClientResponse<T> response)
+        {
+            if (!response.WasSuccessful())
             {
-                if (token != null)
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, token);
-                }
-
-                var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-
-                var response = await client.PostAsync(Constants.GetConfigValue("AUTH_URL") + endpoint, content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                
-                return (response.StatusCode, responseContent);
+                throw new Validation("falha");
             }
         }
 
-        [HttpPost("ChangePassword")]
-        public async Task ChangePassword(ChangePasswordDTO dto)
+        [HttpPost("ChangeUserData")]
+        public async Task ChangeUserData(ChangeUserDataDTO dto)
         {
-            var token = await HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
+            var token = await GetToken(HttpContext);
+            var id = Guid.Parse(new JwtSecurityTokenHandler().ReadJwtToken(token).Subject);
 
-            var body = new
-            {
-                currentPassword = dto.CurrentPassword,
-                password = dto.NewPassword
-            };
+            UserRequest userRequest = new();
+            userRequest.user = new();
+            userRequest.user.email = dto.Email;
+            userRequest.user.fullName = dto.Name;
 
-            var respChange = await Post(token, "/api/user/change-password", body);
+            var client = GetFusionAuthClient();
+            var response = await client.UpdateUserAsync(id, userRequest);
+            ValidateResponse(response);
+        }
 
-            if (respChange.Item1 != HttpStatusCode.OK)
-            {
-                if (respChange.Item1 == HttpStatusCode.NotFound)
-                {
-                    throw new Validation("Incorrect current password");
-                }
+        [HttpPost("ChangePassword")]
+        public async Task<string> ChangePassword(ChangePasswordDTO dto)
+        {
+            var token = await GetToken(HttpContext);
+            var email = new JwtSecurityTokenHandler().ReadJwtToken(token).Claims.First(claim => claim.Type == "email").Value;
 
-                Console.WriteLine(respChange.Item2);
-                throw new Validation("Error changing password"); //** get error ?
-            }
-            
-            //
+            var client = GetFusionAuthClient();
 
-            /*
-            var bodyRefresh = new
-            {
-                applicationId = new JwtSecurityTokenHandler().ReadJwtToken(token).Audiences.First(),
-                oneTimePassword = JsonConvert.DeserializeObject<dynamic>(respChange.Item2).oneTimePassword.Value
-            };
+            ForgotPasswordRequest forgot = new();
+            forgot.sendForgotPasswordEmail = false;
+            forgot.email = email;
 
-            var respRefresh = await Post(null, "/api/login", bodyRefresh);
+            var respForgot = await client.ForgotPasswordAsync(forgot);
+            ValidateResponse(respForgot);
 
-            if (respRefresh.Item1 != HttpStatusCode.OK)
-            {
-                Console.WriteLine(respRefresh.Item2);
-                throw new Validation("Error refreshing token"); //**
-            }
+            ChangePasswordRequest request = new();
+            request.changePasswordId = respForgot.successResponse.changePasswordId;
+            request.currentPassword = dto.CurrentPassword;
+            request.password = dto.NewPassword;
 
-            Console.WriteLine(respRefresh.Item2);
-            return respRefresh.Item2;
-            */
+            var respChange = await client.ChangePasswordAsync(null, request);
+            if (respChange.statusCode == 404) throw new Validation("Incorrect current password");
+            ValidateResponse(respChange);
+
+            LoginRequest loginRequest = new();
+            loginRequest.oneTimePassword = respChange.successResponse.oneTimePassword;
+            loginRequest.applicationId = Guid.Parse(Constants.GetConfigValue("AUTH_APP_ID"));
+
+            var respLogin = await client.LoginAsync(loginRequest);
+            ValidateResponse(respLogin);
+
+            string refreshToken = respLogin.successResponse.refreshToken;
+            if (string.IsNullOrEmpty(refreshToken)) throw new Exception("Refresh token not retrieved from login (maybe Generate refresh token is disabled in Application config)");
+            return refreshToken;
         }
 
     }

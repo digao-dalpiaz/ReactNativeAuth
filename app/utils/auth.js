@@ -139,25 +139,24 @@ export default function useAuth() {
 
   //--REFRESH TOKEN
 
-  async function checkRefresh() {
+  async function checkRefresh(implictToken) {
     const loginInfo = await loadLoginInfo();
     if (!loginInfo) throw new Error('No login info while checking for refresh token');
 
-    const newLoginInfo = await checkRefresCustomData(loginInfo.tokenData); //if no need to refresh, returns null
+    const newLoginInfo = await checkRefresCustomData(loginInfo.tokenData, implictToken); //if no need to refresh, returns null
     return newLoginInfo || loginInfo;
   }
 
-  async function checkRefresCustomData(data) {
-    if (!(data.refreshToken && data.issuedAt && data.expiresIn)) throw new Error('Token without refresh attributes');
-
+  async function checkRefresCustomData(data, implictToken) {
     const tr = new TokenResponse(data);
+    if (implictToken) tr.refreshToken = implictToken;
+    if (!(tr.refreshToken && tr.issuedAt && tr.expiresIn)) throw new Error('Token without refresh attributes');
 
-    if (tr.shouldRefresh()) {
-      log('Token expired, let\'s renew');
+    if (implictToken || tr.shouldRefresh()) {
+      log('Token expired, let\'s renew' + (implictToken ? ' (FORCED)' : ''));
 
       const config = {
         clientId: AUTH_CLIENT_ID,
-        refreshToken: tr.refreshToken
       };
 
       let newTokenData;
@@ -236,8 +235,8 @@ export default function useAuth() {
     await surround('logout', execLogout);
   }
 
-  async function forceLogout() {
-    await saveLoginInfo(null);
+  async function forceRenewToken(refreshToken) {
+    await checkRefresh(refreshToken); //exceptions ???
   }
 
   useEffect(() => {
@@ -246,6 +245,6 @@ export default function useAuth() {
 
   //
 
-  return { processing, profile, login, logout, checkRefresh, forceLogout };
+  return { processing, profile, login, logout, checkRefresh, forceRenewToken };
 
 }
