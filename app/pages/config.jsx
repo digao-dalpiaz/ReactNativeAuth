@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+import Page from "../components/page";
 
 export default function Config() {
 
   return (
-    <View style={{ padding: 10 }}>
+    <Page>
       <Text>Settings</Text>
-    </View>
+    </Page>
   )
 }

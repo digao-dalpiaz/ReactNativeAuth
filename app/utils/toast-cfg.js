@@ -11,7 +11,7 @@ const toastStyle = (color) => {
       paddingVertical: 16,
       borderLeftColor: color,
       height: 'auto',
-      backgroundColor: '#F8F8F8'
+      backgroundColor: '#F9F9F9'
     },
     text1Style: {
       fontSize: 20,

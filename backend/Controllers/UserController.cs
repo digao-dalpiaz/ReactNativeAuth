@@ -1,5 +1,4 @@
-﻿using Azure;
-using backend.DTOs;
+﻿using backend.DTOs;
 using backend.Exceptions;
 using io.fusionauth;
 using io.fusionauth.domain.api;
@@ -8,10 +7,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Ocsp;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Net.Http.Headers;
 
 namespace backend.Controllers
 {
@@ -35,7 +32,7 @@ namespace backend.Controllers
         {
             if (!response.WasSuccessful())
             {
-                throw new Validation("falha");
+                throw new Exception("Error from auth service: " + JsonConvert.SerializeObject(response));
             }
         }
 
@@ -47,8 +44,8 @@ namespace backend.Controllers
 
             UserRequest userRequest = new();
             userRequest.user = new();
-            userRequest.user.email = dto.Email;
-            userRequest.user.fullName = dto.Name;
+            userRequest.user.email = dto.Email.Trim();
+            userRequest.user.fullName = dto.Name.Trim();
 
             var client = GetFusionAuthClient();
             var response = await client.UpdateUserAsync(id, userRequest);

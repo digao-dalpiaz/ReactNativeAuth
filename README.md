@@ -7,16 +7,17 @@ Stack:
 - Database: MySql 8
 - Frontend: React Native with Expo
 - Backend: .NET Core 8
-- OAuth: FusionAuth
+- Auth: FusionAuth
 
 ## How to setup the environment
 
 **Requirements:**
 
 - Node
-- Visual Studio
-- VSCode (optional)
+- .NET Core 8 SDK
+- FusionAuth Server
 - Docker (optional, but recommended)
+- Expo Go for Mobile (optional, if debugging in mobile)
 
 ### FusionAuth
 
@@ -31,6 +32,8 @@ Steps in FusionAuth admin:
 1. Create an Key Master for JWT token (Settings > Key Master > use Generate HMAC secret in the top-right menu)
 2. Create an application, set Client Authentication to "Not required", set Authorized redirect URLs (you can run app once and get this url from error when trying to login).
 3. Enable JWT in app and configure Access token signing key to use the Key Master.
+4. Create an API Key.
+5. Enabled "Generate refresh tokens" in Application > Security.
 
 Optional: Configure the Issuer in Tenant. The default is "acme.com", but you may change this. The JWT validation in backend is based on Issuer, App ID and Key Master secret.
 

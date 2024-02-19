@@ -9,7 +9,8 @@ const btnStyle = {
   paddingHorizontal: 28,
   borderRadius: 4,
   elevation: 3,
-  minHeight: 46
+  minHeight: 46,
+  marginVertical: 8
 }
 
 const textStyle = {

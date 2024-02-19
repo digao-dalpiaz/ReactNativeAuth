@@ -149,7 +149,7 @@ export default function useAuth() {
 
   async function checkRefresCustomData(data, implictToken) {
     const tr = new TokenResponse(data);
-    if (implictToken) tr.refreshToken = implictToken;
+    if (implictToken && implictToken !== 'CURRENT') tr.refreshToken = implictToken;
     if (!(tr.refreshToken && tr.issuedAt && tr.expiresIn)) throw new Error('Token without refresh attributes');
 
     if (implictToken || tr.shouldRefresh()) {
@@ -220,7 +220,6 @@ export default function useAuth() {
       } else {
         log(error);
         toastError('Auth error', error.message);
-        //throw error;
       }
     } finally {
       setProcessing(false);
@@ -236,7 +235,7 @@ export default function useAuth() {
   }
 
   async function forceRenewToken(refreshToken) {
-    await checkRefresh(refreshToken); //exceptions ???
+    return await checkRefresh(refreshToken);
   }
 
   useEffect(() => {

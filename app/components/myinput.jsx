@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
 
 export default function MyInput({ label, value, setValue }) {
 
   return (
-    <>
+    <View style={{ marginVertical: 5 }}>
       {label && <Text>{label}</Text>}
       <TextInput value={value} onChangeText={t => setValue(t)} style={
         {
@@ -17,7 +17,7 @@ export default function MyInput({ label, value, setValue }) {
           padding: 10,
         }
       } />
-    </>
+    </View>
   )
 
 }

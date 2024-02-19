@@ -1,55 +1,51 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import MyButton from "../components/mybutton";
-import { request } from "../utils/request";
+import { api } from "../utils/request";
 import { toastInfo } from "../utils/toast-cfg";
+import Page from "../components/page";
 
 export default function Home() {
 
   return (
-    <View style={{ padding: 10 }}>
+    <Page>
       <Text>Welcome to Home Page</Text>
       <Text>Here are some backend tests:</Text>
-      <Text />
       <MyButton title="Get Info" onPress={getInfo} />
-      <Text />
       <MyButton title="Get Info (only Prof role)" onPress={getInfoOnlyProf} />
-      <Text />
       <MyButton title="Test Error" onPress={testError} />
-      <Text />
       <MyButton title="Test Validation" onPress={testValidation} />
-      <Text />
       <MyButton title="Invalid Endpoint" onPress={invalidEndpoint} />
-    </View>
+    </Page>
   )
 
   function getInfo() {
-    request.get('/Test/GetInfo').then(response => {
-      toastInfo(response.data);
+    api('GET', '/Test/GetInfo', null, data => {
+      toastInfo(data);
     })
   }
 
   function getInfoOnlyProf() {
-    request.get('/Test/GetInfoOnlyProf').then(response => {
-      toastInfo(response.data);
+    api('GET', '/Test/GetInfoOnlyProf', null, data => {
+      toastInfo(data);
     })
-  }  
+  }
 
   function testError() {
-    request.post('/Test/TestError').then(response => {
-      toastInfo(response.data);
+    api('POST', '/Test/TestError', null, data => {
+      toastInfo(data);
     })
   }
 
   function testValidation() {
-    request.post('/Test/TestValidation').then(response => {
-      toastInfo(response.data);
+    api('POST', '/Test/TestValidation', null, data => {
+      toastInfo(data);
     })
   }
 
   function invalidEndpoint() {
-    request.post('/Test/InvalidEndpoint').then(response => {
-      toastInfo(response.data);
+    api('POST', '/Test/InvalidEndpoint', null, data => {
+      toastInfo(data);
     })
   }
 

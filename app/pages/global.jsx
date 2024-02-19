@@ -28,7 +28,7 @@ export default function Global() {
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home"
             screenOptions={{
-              headerRight: () => axiosInterceptor.doing && <Image source={Image_loading} style={{ height: 35, width: 35 }} />
+              headerRight: () => axiosInterceptor.doing && <Image source={Image_loading} style={{ height: 35, width: 35, marginRight: 10 }} />
             }}
             drawerContent={props => {
               return (
