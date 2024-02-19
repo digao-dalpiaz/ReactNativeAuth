@@ -8,10 +8,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import useAuth from "../utils/auth";
 import { useAxiosInterceptor } from "../utils/request";
 import About from "./about";
-import { Image, Text, View } from "react-native";
+import { Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Image_loading from "../assets/loading.gif";
 import User from "./user";
+import UserCard from "../components/user-card";
 
 const Drawer = createDrawerNavigator();
 
@@ -33,11 +34,7 @@ export default function Global() {
             drawerContent={props => {
               return (
                 <DrawerContentScrollView {...props}>
-                  <View style={{ margin: 10, backgroundColor: '#FAD38B', padding: 10, alignItems: 'center' }}>
-                    <AntDesign name="user" size={36} color="#976200" />
-                    <Text>{auth.profile.name}</Text>
-                    <Text>{auth.profile.email}</Text>
-                  </View>
+                  <UserCard auth={auth} />
                   <DrawerItemList {...props} />
                   <DrawerItem label="Logout" onPress={() => auth.logout()} icon={({ color, size }) => <AntDesign name="logout" size={size} color={color} />} />
                 </DrawerContentScrollView>
