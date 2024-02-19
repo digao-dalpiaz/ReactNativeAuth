@@ -75,6 +75,7 @@ export default function User({ auth }) {
   function updateUserData() {
     api('POST', 'User/ChangeUserData', { name, email }, () => {
       tryForceRefresh('CURRENT', 'User data updated', true);
+      //if refresh fails, fields won't be updated (Only the lack of trim should be noticed when this happens)
     })
   }
 
