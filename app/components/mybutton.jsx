@@ -19,7 +19,7 @@ const textStyle = {
   color: 'white'
 }
 
-export default function MyButton({disabled, style, icon, title, onPress}) {
+export default function MyButton({ disabled, style, icon, title, onPress }) {
   return (
     <TouchableOpacity disabled={disabled}
       style={{
