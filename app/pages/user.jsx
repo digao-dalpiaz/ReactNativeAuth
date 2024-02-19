@@ -40,8 +40,9 @@ export default function User({ auth }) {
   const [reNewPassword, setReNewPassword] = useState('');
 
   useEffect(() => {
-    resetUserDataFields(auth.profile);
-    resetPasswordFields();
+    //reset fields when changing screen
+    setUserDataFields(auth.profile);
+    emptyPasswordFields();
   }, [isFocused])
 
   return (
@@ -73,7 +74,7 @@ export default function User({ auth }) {
 
   function updateUserData() {
     api('POST', 'User/ChangeUserData', { name, email }, () => {
-      tryForceRefresh('CURRENT', 'User data updated', info => resetUserDataFields(info.userData));
+      tryForceRefresh('CURRENT', 'User data updated', true);
     })
   }
 
@@ -93,30 +94,27 @@ export default function User({ auth }) {
       return;
     }
 
-    api('POST', 'User/ChangePassword', { currentPassword, newPassword }, data => {
-      tryForceRefresh(data, 'Password changed', () => resetPasswordFields());
+    api('POST', 'User/ChangePassword', { currentPassword, newPassword }, token => {
+      emptyPasswordFields();
+      tryForceRefresh(token, 'Password changed');
     })
   }
 
-  async function tryForceRefresh(token, msgInfo, then) {
-    let info;
-    try {
-      info = await auth.forceRenewToken(token);
-    } catch {
-      toastInfo(msgInfo + ', but due to some problem, please login again!');
-      return;
-    }
-    
-    toastInfo(msgInfo);
-    then(info);
+  function tryForceRefresh(token, msgInfo, setFieldsAfter) {
+    auth.forceRenewToken(token).then(info => {
+      toastInfo(msgInfo);
+      if (setFieldsAfter) setUserDataFields(info.userData);
+    }).catch(error => {
+      toastInfo(msgInfo + ', but due to some problem, please login again!', error.message);
+    })
   }
 
-  function resetUserDataFields(profile) {
-    setName(profile.name);
-    setEmail(profile.email);
+  function setUserDataFields(profileObj) {
+    setName(profileObj.name);
+    setEmail(profileObj.email);
   }
 
-  function resetPasswordFields() {
+  function emptyPasswordFields() {
     setCurrentPassword('');
     setNewPassword('');
     setReNewPassword('');
