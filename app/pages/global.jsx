@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 
 export default function Global() {
 
-  const auth = useAuth();
+  const auth = useAuth(false);
   const axiosInterceptor = useAxiosInterceptor(auth);
 
   return (

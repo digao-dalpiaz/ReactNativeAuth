@@ -14,7 +14,7 @@ class DismissError extends Error {
   }
 }
 
-export default function useAuth() {
+export default function useAuth(checkForRefreshWhenInit) {
 
   const [profile, setProfile] = useState(false); //profile contains user data and when not null means user logged in
   const [processing, setProcessing] = useState(true); //start waiting to avoid flickering
@@ -130,11 +130,14 @@ export default function useAuth() {
       return;
     }
 
-    log('Login stored, let\'s check if we need to refresh');
-    if (!await checkRefresCustomData(info.tokenData)) {
-      //no need to refresh
-      await saveLoginInfo(info, true); //only set state
+    log('Login previously stored');
+
+    if (checkForRefreshWhenInit) {
+      log('Check if we need to refresh');
+      if (await checkRefresCustomData(info.tokenData)) return; //saveLoginInfo will occur inside method
     }
+
+    await saveLoginInfo(info, true); //only set state
   }
 
   //--REFRESH TOKEN
